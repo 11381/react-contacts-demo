@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 
-import FilterableContactList from "./contact-list-filterable";
+import FilterableContactList from "./filterable-contact-list";
 import SimpleError from "./simple-error";
 
 class Contacts extends Component {

@@ -2,7 +2,7 @@ import React from 'react';
 
 import App from "./app.js";
 import ContactListContainer from "../containers/contact-list-container";
-import ContactEditContainer from "../containers/contact-edit-container";
+import ContactEditContainer from "../containers/edit-contact-container";
 import { Provider } from "react-redux";
 
 import { Router, Route, IndexRoute, hashHistory } from "react-router";

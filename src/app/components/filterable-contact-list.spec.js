@@ -1,6 +1,6 @@
 import React from "react";
 import TestUtils from 'react-addons-test-utils';
-import ContactList from "./contact-list-filterable";
+import ContactList from "./filterable-contact-list";
 
 describe("contact-list-filterable", function(){
     var component = null;

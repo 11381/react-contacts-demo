@@ -1,6 +1,6 @@
 import React from "react";
 import TestUtils from 'react-addons-test-utils';
-import EditContact from "./contact-edit";
+import EditContact from "./edit-contact";
 
 describe("contact-edit", function(){
     var component = null;

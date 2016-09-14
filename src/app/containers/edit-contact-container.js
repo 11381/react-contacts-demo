@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import EditContact from "../components/contact-edit";
+import EditContact from "../components/edit-contact";
 import { withRouter } from 'react-router';
 import { DEFAULT_CONTACT } from "../models/contact";
 

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import Contacts from "./contacts";
 
 import TestUtils from 'react-addons-test-utils';
-import FilterableContactList from "./contact-list-filterable";
+import FilterableContactList from "./filterable-contact-list";
 import SimpleError from "./simple-error";
 
 describe("Contacts", function(){

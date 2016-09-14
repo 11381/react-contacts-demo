@@ -1,6 +1,6 @@
 import React from "react";
 import TestUtils from 'react-addons-test-utils';
-import EditContactContainer from "./contact-edit-container";
+import EditContactContainer from "./edit-contact-container";
 
 import configureStore from "redux-mock-store";
 import promiseMiddleware from "../store/simple-promise";
