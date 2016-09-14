@@ -3,71 +3,79 @@ import React, {
     PropTypes,
 } from 'react';
 
-class EditContact extends Component {
-    constructor(){
-        super();
-        this.state = {
-            contact: {
-                name: "",
-                email: ""
-            }
-        };
-    }
+import SimpleError from "./simple-error";
+import { DEFAULT_CONTACT, validate } from "../models/contact";
 
+class EditContact extends Component {
     saveContact(e){
         e.preventDefault();
-        this.props.onSave(this.state.contact);
+        this.props.onSave(this.props.contact);
     }
 
     componentDidMount(){
-        this.refs.name.focus();
+        this.props.onLoad();
     }
 
-    componentWillMount(){
-        this.setState({
-            contact: Object.assign({}, this.state.contact, this.props.contact)
-        });
+    firstNameChanged(e){
+        this.onChange(Object.assign({}, this.props.contact, {
+            firstName: e.target.value
+        }));
     }
 
-    nameChanged(e){
-        this.state.contact.name = e.target.value;
-        this.setState({
-            contact: this.state.contact
-        });
+    lastNameChanged(e){
+        this.onChange(Object.assign({}, this.props.contact, {
+            lastName: e.target.value
+        }));
     }
 
     emailChanged(e){
-        this.state.contact.email = e.target.value;
-        this.setState({
-            contact: this.state.contact
-        });
+        this.onChange(Object.assign({}, this.props.contact, {
+            email: e.target.value
+        }));
     }
 
-    isNameValid(){
-        var contact = this.state.contact;
-        return contact && contact.name && contact.name.trim().length > 0;
+    onChange(contact){
+        this.props.onChange(contact);
     }
 
     render() {
+        let validations = validate(this.props.contact);
+        let hasValidationErros = Object.keys(validations).length;
+
         return (
             <div>
                 <h4>
                     Contact Details
                 </h4>
                 <hr />
+                { this.props.error && <SimpleError error={this.props.error} /> }
                 <form onSubmit={this.saveContact.bind(this)} ref="form">
-                    <div className={"form-group" + (!this.isNameValid.bind(this)() && " has-error")}>
-                        <label htmlFor="name">Name</label>
-                        <input className="form-control" id="name" ref="name" type="text" value={this.state.contact.name} onChange={this.nameChanged.bind(this)} />
+                    <div className="row">
+                        <div className="col-sm-6">
+                            <div className={"form-group" + (validations.name ? " has-error" : "")}>
+                                <label htmlFor="name">First name</label>
+                                <input autoFocus className="form-control" id="firstName" ref="firstName" type="text" value={this.props.contact.firstName} onChange={this.firstNameChanged.bind(this)} />
+                            </div>
+                        </div>
+                        <div className="col-sm-6">
+                            <div className="form-group">
+                                <label htmlFor="name">Last name</label>
+                                <input className="form-control" id="lastName" ref="lastName" type="text" value={this.props.contact.lastName} onChange={this.lastNameChanged.bind(this)} />
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="form-group">
-                        <label htmlFor="email">Email</label>
-                        <input className="form-control" id="email" ref="email" type="email" value={this.state.contact.email} onChange={this.emailChanged.bind(this)} />
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <div className={"form-group" + (validations.email ? " has-error": "")}>
+                                <label htmlFor="email">Email</label>
+                                <input className="form-control" id="email" ref="email" type="email" value={this.props.contact.email} onChange={this.emailChanged.bind(this)} />
+                            </div>
+                        </div>
                     </div>
 
                     <button className="btn btn-link" ref="cancel" onClick={this.props.onCancel} type="button">Cancel</button>
-                    <button className="btn btn-primary" type="submit" disabled={!this.isNameValid.bind(this)()}><i className="glyphicon glyphicon-ok"></i> Save</button>
+                    <button className="btn btn-primary" type="submit" disabled={hasValidationErros}><i className="glyphicon glyphicon-ok"></i> Save</button>
                 </form>
             </div>
         );
@@ -75,14 +83,18 @@ class EditContact extends Component {
 }
 
 EditContact.propTypes = {
-    contact: PropTypes.object.isRequired,
+    contact: PropTypes.object,
     onSave: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired
 };
 
 EditContact.defaultProps = {
-    onSave: ()=>{},
-    onCancel: ()=>{}
+    contact: DEFAULT_CONTACT,
+    onSave: () => {},
+    onChange: () => {},
+    onCancel: () => {},
+    onLoad: () => {}
 };
 
 export default EditContact;

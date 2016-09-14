@@ -10,7 +10,7 @@ class SimpleError extends Component {
                 <div className="alert alert-danger" role="alert">
                     <span className="glyphicon glyphicon-exclamation-sign"></span>
                     <span className="sr-only">Error:</span>
-                    &nbsp;{this.props.error}
+                    &nbsp;{this.props.error.toString()}
                     {this.props.children}
                 </div>
             </div>
@@ -19,7 +19,7 @@ class SimpleError extends Component {
 }
 
 SimpleError.propTypes = {
-    error: PropTypes.string
+    error: PropTypes.any
 };
 
 export default SimpleError;

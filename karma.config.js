@@ -17,7 +17,7 @@ module.exports = function(config) {
                         loader: 'babel',
                         query: {
                             presets: ['es2015', 'react'],
-                            plugins: ['transform-object-rest-spread', 'babel-plugin-rewire', 'transform-object-assign']
+                            plugins: ['transform-object-rest-spread', 'transform-object-assign']
                         }
                     }
                 ]

@@ -1,31 +1,25 @@
-import 'whatwg-fetch';
-import promise from 'es6-promise';
-promise.polyfill();
-
 import React from "react";
-
+import ReactDOM from "react-dom";
 import Contacts from "./contacts";
-
-class ContactServiceMock {
-    getAll(){
-        return [];
-    }
-}
-
-Contacts.__Rewire__("../services/contacts", new ContactServiceMock());
 
 import TestUtils from 'react-addons-test-utils';
 import FilterableContactList from "./contact-list-filterable";
-import EditContact from "./contact-edit";
 import SimpleError from "./simple-error";
 
 describe("Contacts", function(){
+    var node = null;
     var component = null;
+    var onRequestList = null;
+    var onCreate = null;
+    var onEdit = null;
 
     beforeEach(function() {
-        spyOn(Contacts.prototype, "refreshContacts");
-        spyOn(Contacts.prototype, "handleAddContact");
-        component = TestUtils.renderIntoDocument(<Contacts />);
+        node = document.createElement("div");
+        onCreate = jasmine.createSpy("onRequestList");
+        onRequestList = jasmine.createSpy("onRequestList");
+        onEdit = jasmine.createSpy("onEdit");
+        spyOn(Contacts.prototype, "handleContactDelete");
+        component = ReactDOM.render(<Contacts onRequestList={onRequestList} onCreate={onCreate} onEdit={onEdit} />, node);
     });
 
     it("renders", function(){
@@ -33,73 +27,36 @@ describe("Contacts", function(){
     });
 
     it("calls refresh after mount", function(){
-        expect(component.refreshContacts).toHaveBeenCalled();
+        expect(onRequestList).toHaveBeenCalled();
     });
 
     it("should call handleAddContact when the add button is clicked", function() {
         var addButton = component.refs.add;
         TestUtils.Simulate.click(addButton);
-        expect(component.handleAddContact).toHaveBeenCalled();
-    });
-
-    it("should handle contact edit", function(){
-        var contact = {id:1};
-        component.handleContactEdit(contact);
-        expect(component.state.editContact).toBe(contact);
-    });
-
-    it("should stop editing", function(){
-        component.handleContactEdit({id:1});
-        component.stopEditing();
-        expect(component.state.editContact).toBeNull();
+        expect(onCreate).toHaveBeenCalled();
     });
 
     it("should show the contact list if there are contacts", function(){
-        component.setState({
-            contacts: [{
-                id:1,
-            }]
-        }, function(){
-            var list = TestUtils.findAllInRenderedTree(component, c => c instanceof FilterableContactList);
-            expect(list && list.length).toBeTruthy();
-        });
+        component = ReactDOM.render(<Contacts contacts={[{id: 1}]} />, node);
+        expect(() => TestUtils.findRenderedComponentWithType(component, FilterableContactList))
+            .not.toThrow();
     });
 
     it("should hide the contact list if there are no contacts", function(){
-        component.setState({
-            contacts: []
-        }, function(){
-            var list = TestUtils.findAllInRenderedTree(component, c => c instanceof FilterableContactList);
-            expect(list && list.length).toBeFalsy();
-        });
-    });
-
-    it("should show the edit contact component when editing", function(){
-        component.handleContactEdit({id:1});
-        var list = TestUtils.findAllInRenderedTree(component, c => c instanceof EditContact);
-        expect(list && list.length).toBeTruthy();
-    });
-
-    it("should not show the edit contact component when not editing", function(){
-        component.handleContactEdit({id:1});
-        component.stopEditing();
-        var list = TestUtils.findAllInRenderedTree(component, c => c instanceof EditContact);
-        expect(list && list.length).toBeFalsy();
+        component = ReactDOM.render(<Contacts contacts={[]} />, node);
+        expect(() => TestUtils.findRenderedComponentWithType(component, FilterableContactList))
+            .toThrow();
     });
 
     it("should show the error component if there is an error", function(){
-        component.setState({
-            error: "some error"
-        });
-        var list = TestUtils.findAllInRenderedTree(component, c => c instanceof SimpleError);
-        expect(list && list.length).toBeTruthy();
+        component = ReactDOM.render(<Contacts error="error" />, node);
+        expect(() => TestUtils.findRenderedComponentWithType(component, SimpleError))
+            .not.toThrow();
     });
 
     it("should not show the error component if there is not an error", function(){
-        component.setState({
-            error: null
-        });
-        var list = TestUtils.findAllInRenderedTree(component, c => c instanceof SimpleError);
-        expect(list && list.length).toBeFalsy();
+        component = ReactDOM.render(<Contacts error={null} />, node);
+        expect(() => TestUtils.findRenderedComponentWithType(component, SimpleError))
+            .toThrow();
     });
 });

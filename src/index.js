@@ -2,9 +2,23 @@ import "./vendor";
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from "./app/components/app.js";
+import Routes from "./app/components/routes";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import { contact, contactList } from "./app/store/reducers";
+import promiseMiddleware from "./app/store/simple-promise";
+import createLogger from 'redux-logger';
+
+const logger = createLogger();
+
+const store = createStore(
+    combineReducers({
+        contact,
+        contactList
+    }),
+    applyMiddleware(promiseMiddleware(), logger)
+);
 
 ReactDOM.render(
-    <App />,
+    <Routes store={store} />,
     document.getElementById('content')
 );

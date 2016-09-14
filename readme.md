@@ -10,14 +10,15 @@ Before completing any further actions you must `npm install`
 
     npm start
     
-> **Note**  
-When running the dev server for the first time the lite-server will likely boot before the webpack compilation completes so you might have to refresh the browser window once the initial compile completes to receive the application.
+Runs an instance of webpack-dev-server
 
 ---
 
 #### Testing:
 
     npm test
+
+Runs jasmine with karma targeting phantomjs for headless testing
 
 ---
 

@@ -5,11 +5,13 @@ export default class ContactService {
 
     getAll(){
         return fetch(this.endpoint)
+            .then(r => this.handleErrors(r))
             .then(r => r.json());
     }
 
     getById(id){
         return fetch(`${this.endpoint}/${id}`)
+            .then(r => this.handleErrors(r))
             .then(r => r.json());
     }
 
@@ -29,7 +31,9 @@ export default class ContactService {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(contact)
-        }).then(r => r.json());
+        })
+            .then(r => this.handleErrors(r))
+            .then(r => r.json());
     }
 
     update(contact){
@@ -39,12 +43,19 @@ export default class ContactService {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(contact)
-        });
+        }).then(r => this.handleErrors(r));
     }
 
     delete(id){
         return fetch(`${this.endpoint}/${id}`, {
             method: 'DELETE'
-        });
+        }).then(r => this.handleErrors(r));
+    }
+
+    handleErrors(response) {
+        if (!response.ok) {
+            throw Error(response.statusText);
+        }
+        return response;
     }
 }

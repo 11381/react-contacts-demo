@@ -14,13 +14,13 @@ class FilterableContactList extends Component {
     getFilteredContacts(){
         var pattern = this.state.searchText.toLocaleLowerCase().trim();
         var contacts = this.props.contacts;
-        return pattern.length ? contacts.filter(c => c.name.toLowerCase().indexOf(pattern) != -1) : contacts
+        return pattern.length ? contacts.filter(c => (c.firstName + c.lastName + c.email).toLowerCase().indexOf(pattern) != -1) : contacts
     }
 
     handleTextChanged(e){
         this.setState({
             searchText: e.target.value
-        })
+        });
     }
 
     render()
@@ -32,8 +32,11 @@ class FilterableContactList extends Component {
                     {this.getFilteredContacts().map(contact => {
                         return (
                             <li className="list-group-item" key={contact.id}>
-                                <h5 className="list-group-item-heading">Name: {contact.name}</h5>
-                                <p>email: <a href={`mailto:${contact.email}`}>{contact.email}</a></p>
+                                <h5 className="list-group-item-heading">Name: {contact.firstName} {contact.lastName}</h5>
+                                {
+                                    contact.email &&
+                                        <p>email: <a href={`mailto:${contact.email}`}>{contact.email}</a></p>
+                                }
 
                                 <button type="button"
                                         className="btn btn-default"

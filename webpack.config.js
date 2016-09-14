@@ -36,5 +36,12 @@ module.exports =  {
         new HtmlWebpackPlugin({
             template: 'src/index.html',
         })
-    ]
+    ],
+
+    devServer: {
+        historyApiFallback: true,
+        inline: true,
+        port: 3000,
+        contentBase: "dist/"
+    }
 };

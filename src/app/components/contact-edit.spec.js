@@ -5,14 +5,16 @@ import EditContact from "./contact-edit";
 describe("contact-edit", function(){
     var component = null;
     var contact = {
-        name: "Q",
+        firstName: "Q",
+        lastName: "R",
         email: "q@q.q"
     };
     var onCancel = null;
 
     beforeEach(function() {
         spyOn(EditContact.prototype, "saveContact");
-        spyOn(EditContact.prototype, "nameChanged");
+        spyOn(EditContact.prototype, "firstNameChanged");
+        spyOn(EditContact.prototype, "lastNameChanged");
         spyOn(EditContact.prototype, "emailChanged");
         onCancel = jasmine.createSpy("onCancel");
         component = TestUtils.renderIntoDocument(<EditContact contact={contact} onCancel={onCancel} />);
@@ -27,9 +29,14 @@ describe("contact-edit", function(){
         expect(component.saveContact).toHaveBeenCalled();
     });
 
-    it("should call nameChanged on name input change", function(){
-        TestUtils.Simulate.change(component.refs.name);
-        expect(component.nameChanged).toHaveBeenCalled();
+    it("should call firstNameChanged on name input change", function(){
+        TestUtils.Simulate.change(component.refs.firstName);
+        expect(component.firstNameChanged).toHaveBeenCalled();
+    });
+
+    it("should call lastNameChanged on name input change", function(){
+        TestUtils.Simulate.change(component.refs.lastName);
+        expect(component.lastNameChanged).toHaveBeenCalled();
     });
 
     it("should call emailChanged on name input change", function(){
@@ -42,9 +49,14 @@ describe("contact-edit", function(){
         expect(onCancel).toHaveBeenCalled();
     });
 
-    it("should reflect the value of the name in the name field", function(){
-        var fieldValue = component.refs.name.value;
-        expect(fieldValue).toEqual(contact.name);
+    it("should reflect the value of the firstName in the firstName field", function(){
+        var fieldValue = component.refs.firstName.value;
+        expect(fieldValue).toEqual(contact.firstName);
+    });
+
+    it("should reflect the value of the lastName in the lastName field", function(){
+        var fieldValue = component.refs.lastName.value;
+        expect(fieldValue).toEqual(contact.lastName);
     });
 
     it("should reflect the value of the email in the email field", function(){
