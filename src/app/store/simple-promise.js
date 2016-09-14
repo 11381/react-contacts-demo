@@ -1,3 +1,5 @@
+// This is a adaptation of https://github.com/alanrubin/redux-simple-promise (Licensed MIT. Copyright 2015 Alan Rubin.)
+
 function isPromise(val) {
     return val && isFunction(val.then);
 }
