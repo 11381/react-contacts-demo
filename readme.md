@@ -10,7 +10,7 @@ Before completing any further actions you must `npm install`
 
     npm start
     
-Runs an instance of webpack-dev-server
+Runs an instance of webpack-dev-server @ http://localhost:3000
 
 ---
 
